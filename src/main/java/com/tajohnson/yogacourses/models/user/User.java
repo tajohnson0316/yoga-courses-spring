@@ -1,9 +1,12 @@
 package com.tajohnson.yogacourses.models.user;
 
+import com.tajohnson.yogacourses.models.course.Course;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -30,6 +33,8 @@ public class User {
   @Size(min = 8, max = 128, message = "Passwords must match")
   private String confirmPassword;
 
+  @OneToMany(mappedBy = "instructor", fetch = FetchType.LAZY)
+  private List<Course> courses;
 
   public User() {
   }
@@ -72,5 +77,13 @@ public class User {
 
   public void setConfirmPassword(String confirmPassword) {
     this.confirmPassword = confirmPassword;
+  }
+
+  public List<Course> getCourses() {
+    return courses;
+  }
+
+  public void setCourses(List<Course> courses) {
+    this.courses = courses;
   }
 }
