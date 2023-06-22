@@ -52,8 +52,7 @@
 </nav>
 <div class="container p-5">
   <h1 class="mb-3">Welcome, Instructor ${userName}!</h1>
-  <div class="d-flex justify-content-between">
-    <%-- TODO: TABLE DESCRIPTION --%>
+  <div class="d-flex justify-content-between align-items-end mb-3">
     <p>Course Schedule:</p>
     <a href="/courses/new/form" class="btn btn-outline-success" role="button">
       + New Course
@@ -65,7 +64,6 @@
         <table class="table table-striped table-bordered">
           <thead>
           <tr>
-            <%-- TODO: COLUMN NAMES HERE --%>
             <th scope="col">Course Name</th>
             <th scope="col">Instructor</th>
             <th scope="col">Weekday</th>
@@ -80,27 +78,39 @@
               <td>
                 <a href="/courses/${course.id}">${course.name}</a>
               </td>
-              <td>${course.instructor}</td>
+              <td>${course.instructor.userName}</td>
               <td>${course.day}</td>
-              <td>$${course.price}</td>
               <td>
-                <fmt:formatDate value="${course.time}" type="time"/>
+                <fmt:formatNumber type="currency" value="${course.price}"/>
               </td>
+              <td>
+                <fmt:formatDate type="time" value="${course.time}"/>
+              </td>
+              <c:choose>
+                <c:when test="${course.instructor.id == userId}">
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      <form action="/courses/delete/${course.id}" method="post">
+                        <div class="btn-group" role="group">
+                          <a href="/courses/edit/${course.id}" class="btn btn-warning">
+                            Edit
+                          </a>
+                          <input type="hidden" name="_method" value="delete">
+                          <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                      </form>
+                    </div>
+                  </td>
+                </c:when>
+                <c:otherwise>
+                  <td>
+                    ---
+                  </td>
+                </c:otherwise>
+              </c:choose>
                 <%-- VIEW | EDIT | DELETE --%>
               <c:if test="${course.instructor.id == userId}">
-                <td>
-                  <div class="d-flex justify-content-center">
-                    <form action="#" method="post">
-                      <div class="btn-group" role="group">
-                        <a href="#" class="btn btn-warning">
-                          Edit
-                        </a>
-                        <input type="hidden" name="_method" value="delete">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                      </div>
-                    </form>
-                  </div>
-                </td>
+              
               </c:if>
             </tr>
           </c:forEach>

@@ -52,22 +52,22 @@
 <div class="container p-5">
   <div class="card w-100 mb-5">
     <div class="card-header text-center fs-3">
-      <%-- TODO: VIEW CARD HEADER --%>
       ${course.name}
     </div>
     <div class="card-body">
-      <%-- TODO: VIEW CARD CONTENT --%>
       <div class="d-flex justify-content-start gap-3 mb-3">
         <span class="fw-bold">Day:</span>
         <span>${course.day}</span>
       </div>
       <div class="d-flex justify-content-start gap-3 mb-3">
         <span class="fw-bold">Price:</span>
-        <span>$${course.price}</span>
+        <fmt:formatNumber value="${course.price}" type="currency"/>
       </div>
       <div class="d-flex justify-content-start gap-3 mb-3">
         <span class="fw-bold">Time:</span>
-        <fmt:formatDate type="time" value="${course.time}"/>
+        <span>
+          <fmt:formatDate value="${course.time}" type="time"/>
+        </span>
       </div>
       <p class="fs-3">
         ${course.description}

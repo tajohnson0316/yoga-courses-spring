@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -32,10 +31,11 @@ public class Course {
   private Double price;
 
   @NotNull(message = "Course time is required")
-  private LocalTime time;
+  @DateTimeFormat(pattern = "HH:mm")
+  private Date time;
 
   @NotBlank(message = "Course description is required")
-  @Size(min = 3, message = "Requires a minimum of 36 characters")
+  @Size(min = 3, message = "Requires a minimum of 3 characters")
   private String description;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -102,11 +102,11 @@ public class Course {
     this.price = price;
   }
 
-  public @NotNull LocalTime getTime() {
+  public @NotNull Date getTime() {
     return time;
   }
 
-  public void setTime(@NotNull LocalTime time) {
+  public void setTime(@NotNull Date time) {
     this.time = time;
   }
 

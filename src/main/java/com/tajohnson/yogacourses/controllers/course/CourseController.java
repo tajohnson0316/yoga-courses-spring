@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class CourseController {
@@ -98,6 +95,29 @@ public class CourseController {
     return "course/viewCourse.jsp";
   }
 
+  // *** DISPLAY EDIT COURSE FORM ***
+  @GetMapping("/courses/edit/{id}")
+  public String displayEditCourseForm(
+    @PathVariable("id") Long id,
+    HttpSession session,
+    Model model
+  ) {
+    if (session.getAttribute("userId") == null) {
+      return "redirect:/logout";
+    }
+
+    Long userId = (Long) session.getAttribute("userId");
+    if (!userService.isValidId(userId)) {
+      return "redirect:/logout";
+    }
+
+    Course course = courseService.getCourseById(id);
+    model.addAttribute("course", course);
+    model.addAttribute("userId", userId);
+
+    return "course/courseEditForm.jsp";
+  }
+
   //  =============== POST ROUTES ===============
 
   // *** CREATE NEW COURSE ***
@@ -153,5 +173,43 @@ public class CourseController {
     courseService.addStudentToCourse(id, student.getId());
 
     return String.format("redirect:/courses/%d", id);
+  }
+
+  // =============== PUT ROUTES ===============
+
+  // *** UPDATE COURSE ***
+  @PutMapping("/courses/update/{id}")
+  public String updateCourse(
+    @Valid @ModelAttribute("course") Course course,
+    BindingResult result,
+    HttpSession session,
+    Model model
+  ) {
+    Long userId = (Long) session.getAttribute("userId");
+
+    if (result.hasErrors()) {
+      model.addAttribute("course", course);
+      model.addAttribute("userId", userId);
+
+      return "course/courseEditForm.jsp";
+    }
+    courseService.updateCourse(course, course.getId());
+
+    return String.format("redirect:/courses/%d", course.getId());
+  }
+
+  //  =============== DELETE ROUTES ===============
+
+  // *** DELETE COURSE ***
+  @DeleteMapping("/courses/delete/{id}")
+  public String deleteProject(@PathVariable("id") Long id) {
+    Course course = courseService.getCourseById(id);
+    for (Student student : course.getStudents()) {
+      student.getCourses().remove(course);
+      studentService.updateStudent(student);
+    }
+    courseService.deleteCourseById(id);
+
+    return "redirect:/dashboard";
   }
 }

@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: arman
   Date: 6/22/2023
-  Time: 12:29 PM
+  Time: 3:07 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
   <script type="text/javascript" src="/js/app.js"></script>
   
-  <title>YoYoga - New Course</title>
+  <title>YoYoga - Edit Course</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -51,8 +51,8 @@
 </nav>
 
 <div class="container p-5">
-  <h1>Create New Course</h1>
-  <form:form action="/courses/new/create" method="post" modelAttribute="course">
+  <h1>Edit Course</h1>
+  <form:form action="/courses/update/${course.id}" method="put" modelAttribute="course">
     <form:input type="hidden" path="instructor" value="${userId}"/>
     <div class="mb-3">
       <form:label path="name" class="form-label">
@@ -89,7 +89,7 @@
         <form:input type="number" path="price" class="form-control w-50" min="0.01" step="0.01"/>
       </div>
       <p class="text-danger">
-        <form:errors path="price"/>
+        <form:errors path="name"/>
       </p>
     </div>
     <div class="mb-3">
@@ -113,7 +113,7 @@
     </div>
     <div class="d-flex justify-content-end gap-3">
       <a href="/dashboard" class="btn btn-danger" role="button">Cancel</a>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-success">Save Changes</button>
     </div>
   </form:form>
 </div>

@@ -46,12 +46,12 @@ public class CourseService {
     return courseRepository.save(course);
   }
 
-  public Course updateCourse(Course course) {
+  public Course updateCourse(Course course, Long id) {
     List<Student> allStudents = studentService.allStudents();
     List<Student> enrolledStudents = new ArrayList<>();
 
     for (Student student : allStudents) {
-      if (student.getCourses().contains(course)) {
+      if (student.getCourses().contains(getCourseById(id))) {
         enrolledStudents.add(student);
       }
     }
