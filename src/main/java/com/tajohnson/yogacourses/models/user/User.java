@@ -25,7 +25,7 @@ public class User {
   private String email;
 
   @NotBlank(message = "Password is required!")
-  @Size(message = "Password must be between 8 and 128 characters")
+  @Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
   private String password;
 
   @Transient

@@ -108,10 +108,6 @@
                   </td>
                 </c:otherwise>
               </c:choose>
-                <%-- VIEW | EDIT | DELETE --%>
-              <c:if test="${course.instructor.id == userId}">
-              
-              </c:if>
             </tr>
           </c:forEach>
           </tbody>
